@@ -4,7 +4,6 @@ import { UniqueEntityID } from "./value-objects/unique-entity-id";
 
 export interface CommentProps {
     content: string,
-    answerId: UniqueEntityID;
     authorId: UniqueEntityID;
     createdAt: Date;
     updatedAt?: Date 

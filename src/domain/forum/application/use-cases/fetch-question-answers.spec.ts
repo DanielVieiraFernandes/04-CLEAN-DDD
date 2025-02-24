@@ -30,7 +30,7 @@ describe('Fetch question answers', () => {
         expect(answers).toHaveLength(3)
     })
 
-    it.skip('Should be able to fetch paginated question answers', async () => {
+    it('Should be able to fetch paginated question answers', async () => {
 
         for (let i = 1; i <= 22; i++){
             await inMemoryAnswersRepository.create(MakeAnswer({
