@@ -1,3 +1,4 @@
+import { Either, left, right } from "@/core/either";
 import { Answer } from "../../enterprise/entities/answer";
 import { Question } from "../../enterprise/entities/question";
 import { QuestionComment, QuestionCommentProps } from "../../enterprise/entities/question-comment";
@@ -5,6 +6,7 @@ import { UniqueEntityID } from "../../enterprise/entities/value-objects/unique-e
 import { AnswerRepository } from "../repositories/answers-repository";
 import { QuestionCommentsRepository } from "../repositories/question-comments-repository";
 import { QuestionsRepository } from "../repositories/questions-repository";
+import { ResourceNotFoundError } from "./errors/resource-not-found-error";
 
 interface CommentOnQuestionUseCaseRequest {
     authorId: string;
@@ -12,10 +14,10 @@ interface CommentOnQuestionUseCaseRequest {
     content: string;
 }
 
-interface CommentOnQuestionUseCaseResponse {
+type CommentOnQuestionUseCaseResponse = Either<ResourceNotFoundError,  {
     questionComment: QuestionComment;
 }
-
+>
 // DRY - Don't repeat yourself
 /**
  * não quer dizer que você não possa repetir código
@@ -34,7 +36,7 @@ export class CommentOnQuestionUseCase {
         const question = await this.questionRepository.findById(questionId)
 
         if (!question) {
-            throw new Error('Question not found');
+           return left(new ResourceNotFoundError())
         }
 
         const questionComment = QuestionComment.create({
@@ -45,9 +47,7 @@ export class CommentOnQuestionUseCase {
 
         await this.questionCommentsRepository.create(questionComment)
 
-        return {
-            questionComment
-        }
+        return right({questionComment})
 
     }
 }

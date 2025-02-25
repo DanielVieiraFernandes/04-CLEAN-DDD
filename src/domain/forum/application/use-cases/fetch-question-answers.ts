@@ -1,3 +1,4 @@
+import { Either, right } from "@/core/either";
 import { Answer } from "../../enterprise/entities/answer";
 import { Question } from "../../enterprise/entities/question";
 import { UniqueEntityID } from "../../enterprise/entities/value-objects/unique-entity-id";
@@ -9,9 +10,9 @@ interface FetchQuestionAnswersUseCaseRequest {
     questionId: string;
 }
 
-interface FetchQuestionAnswersUseCaseResponse {
+type FetchQuestionAnswersUseCaseResponse = Either<null, {
     answers: Answer[];
-}
+}>
 
 // DRY - Don't repeat yourself
 /**
@@ -29,8 +30,6 @@ export class FetchQuestionAnswersUseCase {
         const answers = await this.answersRepository.findManyByQuestionId(questionId,{page});
 
        
-        return {
-            answers
-        }
+        return right({answers})
     }
 }

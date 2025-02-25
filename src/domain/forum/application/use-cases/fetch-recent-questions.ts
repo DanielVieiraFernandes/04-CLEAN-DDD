@@ -1,3 +1,4 @@
+import { Either, right } from "@/core/either";
 import { Question } from "../../enterprise/entities/question";
 import { UniqueEntityID } from "../../enterprise/entities/value-objects/unique-entity-id";
 import { QuestionsRepository } from "../repositories/questions-repository";
@@ -6,10 +7,10 @@ interface FetchRecentQuestionsUseCaseRequest {
     page: number;
 }
 
-interface FetchRecentQuestionsUseCaseResponse {
+type FetchRecentQuestionsUseCaseResponse = Either<null, {
     questions: Question[];
 }
-
+>
 // DRY - Don't repeat yourself
 /**
  * não quer dizer que você não possa repetir código
@@ -26,8 +27,6 @@ export class FetchRecentQuestionsUseCase {
         const questions = await this.questionRepository.findManyRecent({page});
 
        
-        return {
-            questions
-        }
+        return right({questions})
     }
 }

@@ -1,3 +1,4 @@
+import { Either, right } from "@/core/either";
 import { Answer } from "../../enterprise/entities/answer";
 import { AnswerComment } from "../../enterprise/entities/answer-comment";
 import { AnswerCommentsRepository } from "../repositories/answers-comments-repository";
@@ -7,10 +8,10 @@ interface FetchAnswerCommentsUseCaseRequest {
     answerId: string;
 }
 
-interface FetchAnswerCommentsUseCaseResponse {
+type FetchAnswerCommentsUseCaseResponse = Either<null,{
     answerComments: AnswerComment[];
 }
-
+>
 // DRY - Don't repeat yourself
 /**
  * não quer dizer que você não possa repetir código
@@ -28,8 +29,6 @@ export class FetchAnswerCommentsUseCase {
             , { page });
 
 
-        return {
-            answerComments
-        }
+        return right({answerComments})
     }
 }

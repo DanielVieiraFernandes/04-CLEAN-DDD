@@ -1,20 +1,23 @@
 import { Slug } from "./value-objects/slug";
-import { Entity } from "@/core/entities/entity";
 import { UniqueEntityID } from "./value-objects/unique-entity-id";
 import { Optional } from "@/core/types/optional";
 import dayjs from "dayjs";
+import { AggregateRoot } from "@/core/entities/aggregate-root";
+import { QuestionAttachment } from "./question-attachement";
+import { QuestionAttachmentList } from "./question-attachment-list";
 
 export interface QuestionProps {
     title: string;
     content: string;
     authorId: UniqueEntityID;
+    attachments: QuestionAttachmentList;
     slug: Slug;
     bestAnswerId?: UniqueEntityID;
     createdAt: Date;
     updatedAt?: Date;
 }
 
-export class Question extends Entity<QuestionProps> {
+export class Question extends AggregateRoot<QuestionProps> {
 
     get authorId() {
         return this.props.authorId;
@@ -37,6 +40,10 @@ export class Question extends Entity<QuestionProps> {
         return this.props.content;
     }
 
+    get attachment(){
+        return this.props.attachments
+    }
+
     get createdAt() {
         return this.props.createdAt;
     }
@@ -51,6 +58,10 @@ export class Question extends Entity<QuestionProps> {
 
     get excerpt() {
         return this.content.substring(0, 120).trimEnd().concat('...');
+    }
+
+    set attachment(attachements: QuestionAttachmentList){
+        this.props.attachments = attachements
     }
 
     set content(content: string) {
@@ -74,11 +85,12 @@ export class Question extends Entity<QuestionProps> {
     }
 
 
-    static create(props: Optional<QuestionProps, 'createdAt' | 'slug'>, id?: UniqueEntityID) {
+    static create(props: Optional<QuestionProps, 'createdAt' | 'slug' | 'attachments'>, id?: UniqueEntityID) {
         const question = new Question({
             ...props,
             slug: props.slug ?? Slug.createFromText(props.title),
-            createdAt: props.createdAt ?? new Date()
+            createdAt: props.createdAt ?? new Date(),
+            attachments: props.attachments ?? new QuestionAttachmentList(),
         }, id)
 
         return question;
