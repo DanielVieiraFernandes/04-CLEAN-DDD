@@ -1,10 +1,9 @@
 import { InMemoryQuestionsRepository } from "test/repositories/in-memory-questions-repository";
 import { MakeQuestion } from "test/factories/make-question";
 import { EditQuestionUseCase } from "./edit-question";
-import { UniqueEntityID } from "../../enterprise/entities/value-objects/unique-entity-id";
-import { NotAllowedError } from "./errors/not-allowed-error";
+import { UniqueEntityID } from "../../../../core/entities/unique-entity-id";
+import { NotAllowedError } from "@/core/errors/errors/not-allowed-error";
 import { InMemoryQuestionAttachmentRepository } from "test/repositories/in-memory-question-attachments-repository";
-import { MakeQuestionComment } from "test/factories/make-question-comment";
 import { MakeQuestionAttachment } from "test/factories/make-question-attachment";
 
 let inMemoryQuestionsRepository: InMemoryQuestionsRepository;
@@ -14,8 +13,8 @@ let sut: EditQuestionUseCase;
 describe('Delete question', () => {
 
     beforeEach(() => {
-        inMemoryQuestionsRepository = new InMemoryQuestionsRepository();
         inMemoryQuestionAttachmentRepository = new InMemoryQuestionAttachmentRepository();
+        inMemoryQuestionsRepository = new InMemoryQuestionsRepository(inMemoryQuestionAttachmentRepository);
         sut = new EditQuestionUseCase(inMemoryQuestionsRepository, inMemoryQuestionAttachmentRepository) // system under test
     })
 
@@ -54,14 +53,14 @@ describe('Delete question', () => {
             content: 'Conteúdo-teste',
         })
         expect(inMemoryQuestionsRepository.items[0].attachment.currentItems).toHaveLength(2)
-                expect(inMemoryQuestionsRepository.items[0].attachment.currentItems).toEqual([
-                    expect.objectContaining({
-                        attachmentId: new UniqueEntityID('1'),
-                    }),
-                    expect.objectContaining({
-                        attachmentId: new UniqueEntityID('3'),
-                    })
-                ])
+        expect(inMemoryQuestionsRepository.items[0].attachment.currentItems).toEqual([
+            expect.objectContaining({
+                attachmentId: new UniqueEntityID('1'),
+            }),
+            expect.objectContaining({
+                attachmentId: new UniqueEntityID('3'),
+            })
+        ])
     })
 
     it('should not be able to delete a question from another user', async () => {

@@ -1,20 +1,26 @@
 import { InMemoryAnswersRepository } from "test/repositories/in-memory-answers-repository";
 import { MakeAnswer } from "test/factories/make-answer";
-import { UniqueEntityID } from "../../enterprise/entities/value-objects/unique-entity-id";
+import { UniqueEntityID } from "../../../../core/entities/unique-entity-id";
 import { InMemoryQuestionsRepository } from "test/repositories/in-memory-questions-repository";
 import { ChooseQuestionBestAnswerUseCase } from "./choose-question-best-answer";
 import { MakeQuestion } from "test/factories/make-question";
-import { NotAllowedError } from "./errors/not-allowed-error";
+import { NotAllowedError } from "@/core/errors/errors/not-allowed-error";
+import { InMemoryAnswerAttachmentRepository } from "test/repositories/in-memory-answer-attachements-repository";
+import { InMemoryQuestionAttachmentRepository } from "test/repositories/in-memory-question-attachments-repository";
 
 let inMemoryAnswersRepository: InMemoryAnswersRepository;
 let inMemoryQuestionsRepository: InMemoryQuestionsRepository;
+let inMemoryAnswerAttachmentRepository: InMemoryAnswerAttachmentRepository;
+let inMemoryQuestionAttachmentsRepository: InMemoryQuestionAttachmentRepository;
 let sut: ChooseQuestionBestAnswerUseCase;
 
 describe('Choose Question Best Answer', () => {
 
     beforeEach(() => {
-        inMemoryAnswersRepository = new InMemoryAnswersRepository();
-        inMemoryQuestionsRepository = new InMemoryQuestionsRepository();
+        inMemoryAnswerAttachmentRepository = new InMemoryAnswerAttachmentRepository();
+        inMemoryAnswersRepository = new InMemoryAnswersRepository(inMemoryAnswerAttachmentRepository);
+        inMemoryQuestionAttachmentsRepository = new InMemoryQuestionAttachmentRepository();
+        inMemoryQuestionsRepository = new InMemoryQuestionsRepository(inMemoryQuestionAttachmentsRepository);
         sut = new ChooseQuestionBestAnswerUseCase(inMemoryAnswersRepository, inMemoryQuestionsRepository) // system under test
     })
 
@@ -35,7 +41,7 @@ describe('Choose Question Best Answer', () => {
             authorId: question.authorId.toString()
         })
 
-        const q =  inMemoryQuestionsRepository.items[0]
+        const q = inMemoryQuestionsRepository.items[0]
         console.log("Question do teste: ", q)
 
 

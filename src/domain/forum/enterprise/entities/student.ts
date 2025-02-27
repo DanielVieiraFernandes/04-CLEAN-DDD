@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto"
-import { Entity } from "../../../../core/entities/entity"
-import { UniqueEntityID } from "./value-objects/unique-entity-id";
+import { Entity } from "@/core/entities/entity"
+import { UniqueEntityID } from "../../../../core/entities/unique-entity-id";
 
 interface StudentProps {
     name: string;

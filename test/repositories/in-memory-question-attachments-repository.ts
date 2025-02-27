@@ -10,4 +10,10 @@ export class InMemoryQuestionAttachmentRepository implements QuestionAttachmentr
         return questionAttachments;
     }
 
+    async deleteManyQuestionById(questionId: string) {
+        const questionAttachments = this.items.filter(item => item.questionId.toString() !== questionId);
+
+        this.items = questionAttachments;
+    }
+
 }

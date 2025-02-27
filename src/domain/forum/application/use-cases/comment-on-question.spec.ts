@@ -2,15 +2,18 @@ import { InMemoryQuestionsRepository } from "test/repositories/in-memory-questio
 import { MakeQuestion } from "test/factories/make-question";
 import { InMemoryQuestionCommentRepository } from "test/repositories/in-memory-question-comments-repository";
 import { CommentOnQuestionUseCase } from "./comment-on-question";
+import { InMemoryQuestionAttachmentRepository } from "test/repositories/in-memory-question-attachments-repository";
 
 let inMemoryQuestionCommentsRepository: InMemoryQuestionCommentRepository;
 let inMemoryQuestionsRepository: InMemoryQuestionsRepository;
+let inMemoryQuestionAttachmentsRepository: InMemoryQuestionAttachmentRepository;
 let sut: CommentOnQuestionUseCase;
 
 describe('Comment on Question', () => {
 
     beforeEach(() => {
-        inMemoryQuestionsRepository = new InMemoryQuestionsRepository();
+        inMemoryQuestionAttachmentsRepository = new InMemoryQuestionAttachmentRepository();
+        inMemoryQuestionsRepository = new InMemoryQuestionsRepository(inMemoryQuestionAttachmentsRepository);
         inMemoryQuestionCommentsRepository = new InMemoryQuestionCommentRepository();
         sut = new CommentOnQuestionUseCase(inMemoryQuestionsRepository, inMemoryQuestionCommentsRepository);
     })

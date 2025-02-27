@@ -1,4 +1,4 @@
-import { UniqueEntityID } from "@/domain/forum/enterprise/entities/value-objects/unique-entity-id";
+import { UniqueEntityID } from "@/core/entities/unique-entity-id";
 
 export class Entity<Props> {
     private _id: UniqueEntityID;
@@ -8,8 +8,20 @@ export class Entity<Props> {
         return this._id
     }
 
-    constructor(props: Props, id?: UniqueEntityID){
+    protected constructor(props: Props, id?: UniqueEntityID){
         this.props = props
         this._id = id ?? new UniqueEntityID(id)
+    }
+
+    public equals(entity: Entity<any>){
+        if(entity === this){
+            return true;
+        }
+
+        if(entity.id === this._id){
+            return true;
+        }
+
+        return false;
     }
 }

@@ -2,11 +2,11 @@ import { Either, left, right } from "@/core/either";
 import { Answer } from "../../enterprise/entities/answer";
 import { Question } from "../../enterprise/entities/question";
 import { QuestionComment, QuestionCommentProps } from "../../enterprise/entities/question-comment";
-import { UniqueEntityID } from "../../enterprise/entities/value-objects/unique-entity-id";
+import { UniqueEntityID } from "../../../../core/entities/unique-entity-id";
 import { AnswerRepository } from "../repositories/answers-repository";
 import { QuestionCommentsRepository } from "../repositories/question-comments-repository";
 import { QuestionsRepository } from "../repositories/questions-repository";
-import { ResourceNotFoundError } from "./errors/resource-not-found-error";
+import { ResourceNotFoundError } from "@/core/errors/errors/resource-not-found-error";
 
 interface CommentOnQuestionUseCaseRequest {
     authorId: string;

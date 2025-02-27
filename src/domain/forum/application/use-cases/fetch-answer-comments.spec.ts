@@ -1,6 +1,6 @@
 import { FetchAnswerCommentsUseCase } from "./fetch-answer-comments";
 import { MakeAnswer } from "test/factories/make-answer";
-import { UniqueEntityID } from "../../enterprise/entities/value-objects/unique-entity-id";
+import { UniqueEntityID } from "../../../../core/entities/unique-entity-id";
 import { InMemoryAnswerCommentRepository } from "test/repositories/in-memory-answer-comments-repository";
 import { MakeAnswerComment } from "test/factories/make-answer-comment";
 
